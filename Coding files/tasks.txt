@@ -1,2 +1,5 @@
 {"task_id": "df5c7a70-cad3-401c-8caf-98be9253a10f", "action_type": "comment", "comment": "So beautiful!"}
 {"task_id": "7001faa2-1f6a-44ca-a5e9-aaec81504c66", "action_type": "comment", "comment": "Hello!"}
+{"task_id": "77edcda3-4e68-42f2-96c6-7040beb11748", "action_type": "comment", "comment": "Heyy there!"}
+{"task_id": "d26a4a98-575f-4d91-bd76-c11e0391dc67", "action_type": "comment", "comment": "How are you doing?"}
+{"task_id": "3bcf3778-0aae-4ac3-b199-5b187ac318fa", "action_type": "like", "comment": ""}
