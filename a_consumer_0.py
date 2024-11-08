@@ -22,20 +22,28 @@ r = redis.Redis(host='localhost', port=6379, decode_responses=True)
 
 # Setting worker status to FREE 
 r.hset(worker_id, 'status', 'FREE')
+msgCount = 0
 
 for msg in consumer :
     if "end" in msg.value :
         break
-    
+
+    # Incrementing message count -> Consumer dying after processing 3 tasks
+    msgCount += 1
+    # if msgCount == 3 :
+    #     print("Consumer 0 dies....")
+    #     break 
+
     # Received task -> setting worker to BUSY
-    print(f"RECEIVED TASK\n")
+    #print(f"RECEIVED TASK\n")
     r.hset(worker_id, 'status', 'BUSY')
     task = msg.value
 
     # Beginning processing -> STEP 1 : SET STATUS
     r.hset(task["task_id"], 'status', 'PROCESSING')
     r.hset(task["task_id"], 'result', 'None')
-    print(f"PROCESSING TASK - {task}\n")
+    #print(f"PROCESSING TASK - {task}\n")
+    print(f"PROCESSING TASK # {msgCount}")
 
     task_id, task_type, task_args = task["task_id"], task["task_type"], task["task_args"].split()
 
@@ -61,7 +69,7 @@ for msg in consumer :
         r.hset(task_id, 'status', 'FAILED')
         r.hset(task_id, 'error_log', str(e))
         r.hset(task_id, 'result', 'None')
-        print(f"UN-SUCCESSFULLY PROCESSED {task_id}\n")
+        #print(f"UN-SUCCESSFULLY PROCESSED {task_id}\n")
 
         '''
         ---------------------------- SHOULD ADD FAILED TASK BACK TO QUEUE ---------------------------------------
@@ -71,7 +79,7 @@ for msg in consumer :
         # Closing processing and storing result
         r.hset(task_id, 'status', 'SUCCESSFUL')
         r.hset(task_id, 'result', res)
-        print(f"SUCCESSFULLY PROCESSED {task_id}\n")
+        #print(f"SUCCESSFULLY PROCESSED {task_id}\n")
 
         # Setting consumer status to FREE again
         r.hset(worker_id, 'status', 'FREE')
