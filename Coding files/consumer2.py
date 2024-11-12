@@ -8,7 +8,6 @@ import time
 redis_client=redis.StrictRedis(host='localhost', port=6379, db=0)
 
 topic=sys.argv[1]
-likes=[]
 redis_channel='status_updates'
 consumer=KafkaConsumer(topic, value_deserializer = lambda m: json.loads(m.decode('ascii')))
 for message in consumer:
@@ -24,10 +23,6 @@ for message in consumer:
     #     print("Status in Redis:", redis_client.get(redis_key).decode())
     #     redis_client.publish(redis_channel, json.dumps({"status": "done"}))
     #     break
-    likes.append(message["action_type"])
     redis_client.set(redis_key, "status:success")
-    redis_client.publish(redis_channel, json.dumps({task_id:{"status": "success", "result": likes}}))
+    redis_client.publish(redis_channel, json.dumps({task_id:{"status": "success", "result": message['action_type']}}))
     print("Status in Redis:", redis_client.get(redis_key).decode())  
-
-likes=sorted(likes)
-print(json.dumps(likes, indent=4))

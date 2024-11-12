@@ -23,7 +23,6 @@ try:
         # Parse the line and determine the topic based on action_type
         task_data = json.loads(line)
         action_type = task_data["action_type"]
-
         if action_type == "comment":
             producer.send(topic1, json.dumps(task_data))
         elif action_type == "like":
