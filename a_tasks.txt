@@ -1,10 +1,5 @@
 add 1 2
 mul 4 abc
-sub 6 3
-add 1 2
-mul 4 abc
-sub 6 3
-add 0 !
-mul 5 s
-sub 8 9
+mul 5 def
+sub 6 five
 end

@@ -31,7 +31,7 @@ for line in sys.stdin :
     task_type, task_args = line
     task_ID = shortuuid.uuid()
     task = {}
-    task = {"task_id" : task_ID, "task_type" : task_type, "task_args" : task_args}
+    task = {"task_id" : task_ID, "task_type" : task_type, "task_args" : task_args, "task_tries" : 0}
 
     # Round-Robin publishing to partitions
     producer.send(tasksTopic, task)
