@@ -6,3 +6,5 @@ Follows task-assignments
     if task still does not succeed, move commit offset, move on to the next task, mark as"FAILED"
 
 Need to add "FAILED" tasks to a new topic (?)
+
+![Screenshot from 2024-11-13 14-11-27](https://github.com/user-attachments/assets/3dfb9079-042d-44e6-a504-14bfbdf6b0e9)
