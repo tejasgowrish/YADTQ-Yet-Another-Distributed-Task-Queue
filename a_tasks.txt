@@ -1,5 +1,0 @@
-add 1 2
-mul 4 abc
-mul 5 def
-sub 6 five
-end
