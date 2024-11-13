@@ -29,8 +29,9 @@ async def get_task_status(request: Request):
     
     status = status.decode()  # Convert bytes to string
     print(f"Task ID {task_id} has status: {status}")  # Debugging print
-    
-    return templates.TemplateResponse("status.html", {"request": request, "task_id": task_id, "status": status[7:]})
+    task_status = status.split(":")[1].split(",")[0][2:-1]
+    task_result = status.split(":")[-1][:-1][2:-1] if task_status == "success" else None
+    return templates.TemplateResponse("status.html", {"request": request, "task_id": task_id, "status": task_status, "result": task_result})
 
 # Define the endpoint for submitting interactions
 @server.get("/", response_class=HTMLResponse)
@@ -56,9 +57,5 @@ async def submit_task(request: Request):
             f.write(json.dumps(task_data) + "\n")
     except Exception as e:
         raise HTTPException(status_code=500, detail="Failed to write task to file")
-    
-    # Store the status in Redis (processing, success, etc.)
-    await redis_client.set(task_id, "status: processing")
-    print(f"Task ID {task_id} status set to processing.")  # Debugging print
     
     return {"task_id": task_id, "message": "Interaction submitted successfully"}

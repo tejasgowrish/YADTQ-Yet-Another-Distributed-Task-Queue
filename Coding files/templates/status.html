@@ -7,8 +7,13 @@
 <body>
     <h1>Task Status</h1>
     <p>Task ID: {{ task_id }}</p>
-    <p>Status: {{ status }}</p>
+    {% if result %}
+        <p>Status: {{ status }}</p>
+        <p>Result: {{ result }}</p>
+    {% else %}
+        <p>Status: {{ status }}</p>
+    {% endif %}
     <br>
-    <a href="/">Submit a new task</a>
+    <button onclick="window.location.href='/'">Submit a new task</button>
 </body>
 </html>

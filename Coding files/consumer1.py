@@ -21,7 +21,7 @@ for message in consumer:
     task_id = message["task_id"] 
     redis_key=task_id
     # Update status to "processing" in Redis
-    redis_client.set(redis_key, "status: processing")
+    redis_client.set(redis_key, "status: 'processing'")
     print("Status in Redis:", redis_client.get(redis_key).decode())  # Print "processing" status
     
     # Publish status "processing" to Redis Pub/Sub channel
@@ -38,7 +38,12 @@ for message in consumer:
     # comments.append(message["comment"])
     
     # Update status to "success" and publish to Redis channel
-    redis_client.set(redis_key, "status: success")
+    time.sleep(30)
+    data = {
+        "status": "success",
+        "result": message["comment"]
+    }
+    redis_client.set(redis_key, json.dumps(data))
     redis_client.publish(redis_channel, json.dumps({task_id:{"status": "success", "result": message["comment"]}}))  # Publish "success" status
     print("Status in Redis:", redis_client.get(redis_key).decode())  # Print "success" status after each addition
 

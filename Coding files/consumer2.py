@@ -15,7 +15,7 @@ for message in consumer:
     print("Received message:", message)
     task_id=message["task_id"]
     redis_key=task_id
-    redis_client.set(redis_key, "status:processing")
+    redis_client.set(redis_key, "status: 'processing'")
     print("Status in Redis:", redis_client.get(redis_key).decode())
     redis_client.publish(redis_channel, json.dumps({task_id:{"status": "processing"}})) 
     # if "stop" in message.value:
@@ -23,6 +23,11 @@ for message in consumer:
     #     print("Status in Redis:", redis_client.get(redis_key).decode())
     #     redis_client.publish(redis_channel, json.dumps({"status": "done"}))
     #     break
-    redis_client.set(redis_key, "status:success")
+    time.sleep(30)
+    data = {
+        "status": "success",
+        "result": message["action_type"]
+    }
+    redis_client.hset(redis_key, json.dumps(data))
     redis_client.publish(redis_channel, json.dumps({task_id:{"status": "success", "result": message['action_type']}}))
     print("Status in Redis:", redis_client.get(redis_key).decode())  
