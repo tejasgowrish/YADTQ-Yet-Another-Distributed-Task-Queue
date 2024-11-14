@@ -21,16 +21,18 @@ async def get_task_status(request: Request):
         raise HTTPException(status_code=400, detail="Task ID is required")
     
     # Retrieve the status from Redis
-    status = await redis_client.get(task_id)
+    status = await redis_client.hget(task_id, "status")
+    result = await redis_client.hget(task_id, "result")
     
     if status is None:
         print(f"Task ID {task_id} not found in Redis.")  # Debugging print
         raise HTTPException(status_code=404, detail="Task not found")
     
     status = status.decode()  # Convert bytes to string
+    result = result.decode() if result else None
     print(f"Task ID {task_id} has status: {status}")  # Debugging print
-    task_status = status.split(":")[1].split(",")[0][2:-1]
-    task_result = status.split(":")[-1][:-1][2:-1] if task_status == "success" else None
+    task_status = status
+    task_result = result
     return templates.TemplateResponse("status.html", {"request": request, "task_id": task_id, "status": task_status, "result": task_result})
 
 # Define the endpoint for submitting interactions

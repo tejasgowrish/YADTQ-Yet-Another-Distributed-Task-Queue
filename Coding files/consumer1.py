@@ -21,8 +21,8 @@ for message in consumer:
     task_id = message["task_id"] 
     redis_key=task_id
     # Update status to "processing" in Redis
-    redis_client.set(redis_key, "status: 'processing'")
-    print("Status in Redis:", redis_client.get(redis_key).decode())  # Print "processing" status
+    redis_client.hset(redis_key, "status", "processing")
+    print("Status in Redis:", redis_client.hget(redis_key, "status").decode())  # Print "processing" status
     
     # Publish status "processing" to Redis Pub/Sub channel
     redis_client.publish(redis_channel, json.dumps({task_id:{"status": "processing"}}))
@@ -39,13 +39,14 @@ for message in consumer:
     
     # Update status to "success" and publish to Redis channel
     time.sleep(10)
-    data = {
-        "status": "success",
-        "result": message["comment"]
-    }
-    redis_client.set(redis_key, json.dumps(data))
+    # data = {
+    #     "status": "success",
+    #     "result": message["comment"]
+    # }
+    redis_client.hset(redis_key, "status", "success")
+    redis_client.hset(redis_key, "result", message["comment"])
     redis_client.publish(redis_channel, json.dumps({task_id:{"status": "success", "result": message["comment"]}}))  # Publish "success" status
-    print("Status in Redis:", redis_client.get(redis_key).decode())  # Print "success" status after each addition
+    print("Status in Redis:", redis_client.hget(redis_key, "status").decode())  # Print "success" status after each addition
 
 # Final status and sorted comments (no need to publish comments here)
 # comments = sorted(comments)
