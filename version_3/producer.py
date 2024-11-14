@@ -31,7 +31,7 @@ for line in sys.stdin :
     task = {"task_id" : task_ID, "task_type" : task_type, "task_args" : task_args, "task_tries" : 0}
     
     # Setting status of task to 'queued'
-    r.hset(task_id, 'status', 'QUEUED')
+    r.hset(task_ID, 'status', 'QUEUED')
     
     # Round-Robin publishing to partitions
     producer.send(tasksTopic, task)

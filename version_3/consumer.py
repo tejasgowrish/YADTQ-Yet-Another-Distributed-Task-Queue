@@ -29,7 +29,7 @@ msgCount = 0
 def killConsumer(message) :
     global consumer,f
     print(message)
-    f.write(message)
+    f.write(message+"\n")
     consumer.close()
     exit()
 
@@ -39,7 +39,7 @@ def process() :
     task_tries += 1
 
    # Killing Consumer while processing msg # in [3,5]
-    if msgCount == random.randint(2,3) :
+    if msgCount == random.randint(3,4) :
         killConsumer("UN...graceful Exit")
 
     try :
@@ -59,7 +59,7 @@ def process() :
     except Exception as e:
         task_status = 'FAILED'
         print(f"Task failed on try {task_tries}")
-        f.write((f"Task failed on try {task_tries}"))
+        f.write((f"Task failed on try {task_tries}\n"))
         # Writing to database only after 3 attempts
         if task_tries == 3 :
             r.hset(task_id, 'status', task_status)
@@ -95,7 +95,7 @@ for msg in consumer :
 
     msgCount += 1
     print(f"Processing -> {msg.topic}, {msg.partition}, {msg.offset}")
-    f.write(f"Processing -> {msg.topic}, {msg.partition}, {msg.offset}")
+    f.write(f"Processing -> {msg.topic}, {msg.partition}, {msg.offset}\n")
 
     # Received task -> setting worker to BUSY
     r.hset(worker_id, 'status', 'BUSY')
@@ -121,7 +121,7 @@ for msg in consumer :
     d = {tp : om}
     consumer.commit(offsets=d)
     print(f"Last committed -> {msg.partition} {msg.offset}")
-    f.write((f"Last committed -> {msg.partition} {msg.offset}"))
+    f.write((f"Last committed -> {msg.partition} {msg.offset}\n"))
 
     # Sleeping n seconds before picking up next msg
     time.sleep(2)
