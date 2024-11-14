@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Task Status</title>
+</head>
+<body>
+    <h1>Task Status</h1>
+    <p>Task ID: {{ task_id }}</p>
+    {% if result %}
+        <p>Status: {{ status }}</p>
+        <p>Result: {{ result }}</p>
+        <p>Error Logs: {{ error_log }}</p>
+        <p>Attempts Made: {{ tries }}</p>
+    {% else %}
+        <p>Status: {{ status }}</p>
+    {% endif %}
+    <br>
+    <button onclick="window.location.href='/'">Submit a new task</button>
+</body>
+</html>

@@ -27,9 +27,9 @@ r.hset(worker_id, 'status', 'FREE')
 msgCount = 0
 
 def killConsumer(message) :
-    global consumer
+    global consumer,f
     print(message)
-    f.write(message + "\n")
+    f.write(message+"\n")
     consumer.close()
     exit()
 
@@ -37,6 +37,10 @@ def killConsumer(message) :
 def process() :
     global task_id, task_type, task_args, task_tries, worker_id, r, msgCount
     task_tries += 1
+
+   # Killing Consumer while processing msg # in [3,5]
+    if msgCount == random.randint(3,4) :
+        killConsumer("UN...graceful Exit")
 
     try :
         task_args = [int(arg) for arg in task_args]
@@ -91,11 +95,12 @@ for msg in consumer :
 
     msgCount += 1
     print(f"Processing -> {msg.topic}, {msg.partition}, {msg.offset}")
-    f.write((f"Processing -> {msg.topic}, {msg.partition}, {msg.offset}\n"))
+    f.write(f"Processing -> {msg.topic}, {msg.partition}, {msg.offset}\n")
 
     # Received task -> setting worker to BUSY
     r.hset(worker_id, 'status', 'BUSY')
     task = msg.value
+
 
     # Beginning processing -> STEP 1 : SET STATUS
     r.hset(task["task_id"], 'status', 'PROCESSING')
@@ -103,25 +108,26 @@ for msg in consumer :
     # print(f"PROCESSING TASK # {msgCount}")
 
     # Delaying beginning of result processing by 10 seconds
-    time.sleep(3)
-    task_id, task_type, task_args, task_tries = task["task_id"], task["task_type"], task["task_args"].split(), task["task_tries"]
+    time.sleep(10)
+    task_id, task_type, task_args, task_tries = task["task_id"], task["task_type"], task["task_args"], task["task_tries"]
     
     task_status, task_tries = process()
 
     # If a task fails more than 3 times -> give up and commit
     while task_status == 'FAILED' and task_tries < 3 :
+        time.sleep(2)
         task_status, task_tries = process()
 
     om = OffsetAndMetadata(offset=msg.offset + 1, metadata=f"{msg.offset} commit")
     tp = TopicPartition(topic=topic, partition=msg.partition)
     d = {tp : om}
     consumer.commit(offsets=d)
-    print(f"Last committed -> {msg.offset}")
-    f.write((f"Last committed -> {msg.offset}\n"))
+    print(f"Last committed -> {msg.partition} {msg.offset}")
+    f.write((f"Last committed -> {msg.partition} {msg.offset}\n"))
 
     # Sleeping n seconds before picking up next msg
     time.sleep(2)
     
-#f.close()
+f.close()
 consumer.close()
 exit()
