@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Submit Task</title>
+</head>
+<body>
+    <h1>Submit Task</h1>
+    <form id="taskForm" action="/" method="post">
+        <label for="actionType">Action Type:</label>
+        <input type="text" id="actionType" name="actionType" required><br>
+        <label for="Comment">Argument 1:</label>
+        <input type="text" id="actionType" name="Arg1" required><br>
+        <label for="Comment">Argument 2:</label>
+        <input type="text" id="Comment" name="Arg2" required><br>
+        <button type="submit">Submit</button>
+    </form>
+    
+    <h2>Check Task Status:</h2>
+    <form action="/status" method="get">
+        <label for="task_id">Enter Task ID:</label>
+        <input type="text" id="task_id" name="task_id" required><br>
+        <button type="submit">Check Status</button>
+    </form>
+</body>
+</html>
