@@ -38,7 +38,7 @@ for message in consumer:
     # comments.append(message["comment"])
     
     # Update status to "success" and publish to Redis channel
-    time.sleep(30)
+    time.sleep(10)
     data = {
         "status": "success",
         "result": message["comment"]
