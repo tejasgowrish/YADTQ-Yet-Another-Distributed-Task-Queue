@@ -39,6 +39,7 @@ for message in consumer:
     
     # Update status to "success" and publish to Redis channel
     time.sleep(10)
+    # print(hello)
     # data = {
     #     "status": "success",
     #     "result": message["comment"]
