@@ -46,8 +46,7 @@ heartbeat_thread.start()
 
 def killConsumer(message) :
     global consumer,f
-    print(message)kafka-topics.sh --bootstrap-server localhost:9092 --delete --topic trialTopic
-
+    print(message)
     f.write(message+"\n")
     f.flush()
     consumer.close()

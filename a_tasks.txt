@@ -18,3 +18,12 @@
 {"task_id": "6a6add84-a054-4c86-a95e-b5f773a9e561", "task_type": "add", "task_args": ["1", "567"], "task_tries": 0}
 {"task_id": "dcbfc2b6-2adf-446a-a607-788c1ea8da80", "task_type": "add", "task_args": ["1", "789"], "task_tries": 0}
 {"task_id": "bb96e2e7-4333-4994-96d8-c339739723cf", "task_type": "add", "task_args": ["abc", "34"], "task_tries": 0}
+{"task_id": "04cd10f1-c96a-4dd2-9cbc-279f066e09db", "task_type": "add", "task_args": ["23", "67"], "task_tries": 0}
+{"task_id": "60c42378-92c9-44ea-a1df-c154d9397d05", "task_type": "mul", "task_args": ["abc", "67"], "task_tries": 0}
+{"task_id": "40b2c1d7-e408-41f4-970e-d40848ec8cb3", "task_type": "mul", "task_args": ["abc", "67"], "task_tries": 0}
+{"task_id": "0cb99933-7f9f-462e-9e2e-818bbf172274", "task_type": "add", "task_args": ["1", "2"], "task_tries": 0}
+{"task_id": "d64705bd-2099-4771-b865-82f7c984ef62", "task_type": "add", "task_args": ["1", "2"], "task_tries": 0}
+{"task_id": "d32f5fcc-d147-4c47-923c-f7147ffe27e7", "task_type": "add", "task_args": ["1", "123"], "task_tries": 0}
+{"task_id": "a624f31d-9206-47f5-a639-ebb81781c258", "task_type": "add", "task_args": ["1", "123"], "task_tries": 0}
+{"task_id": "755eef9a-af91-4ca6-b1f6-0e5b244af423", "task_type": "add", "task_args": ["578", "532"], "task_tries": 0}
+{"task_id": "11bb6cea-2c0b-4758-b9e7-d1f40d2053bb", "task_type": "add", "task_args": ["1", "jgerdigfjijdef"], "task_tries": 0}

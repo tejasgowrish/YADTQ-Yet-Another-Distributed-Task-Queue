@@ -1,0 +1,7 @@
+Processing -> topic1, 0, 13
+Last committed -> 0 13
+Processing -> topic1, 0, 14
+Task failed on try 1
+Task failed on try 2
+Task failed on try 3
+Last committed -> 0 14
