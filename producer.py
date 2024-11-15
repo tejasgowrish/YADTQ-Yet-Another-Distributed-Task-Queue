@@ -18,21 +18,23 @@ taskCount = 0
 try :
     while True :
         line = sys.stdin.readline().strip()
-        # Sending end to all partitions
-        # if "end" in line :
-        #     for p in range(partitions) :
-        #         producer.send(tasksTopic, "end", partition=p)
-        #     break
+        if line :
+            print(line)
+            # Sending end to all partitions
+            # if "end" in line :
+            #     for p in range(partitions) :
+            #         producer.send(tasksTopic, "end", partition=p)
+            #     break
 
-        taskCount += 1
-        task = json.loads(line)
-        # Setting status of task to 'queued'
-        r.hset(task['task_id'], 'status', 'QUEUED')
-        r.hset(task['task_id'], 'tries', 0)
-        
-        # Round-Robin publishing to partitions
-        producer.send(tasksTopic, task)
-        time.sleep(3)
+            taskCount += 1
+            task = json.loads(line)
+            # Setting status of task to 'queued'
+            r.hset(task['task_id'], 'status', 'QUEUED')
+            r.hset(task['task_id'], 'tries', 0)
+            
+            # Round-Robin publishing to partitions
+            producer.send(tasksTopic, task)
+            time.sleep(3)
 
 except KeyboardInterrupt :
     print("Killing Producer")

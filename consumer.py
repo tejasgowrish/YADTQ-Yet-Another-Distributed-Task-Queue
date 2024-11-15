@@ -5,6 +5,7 @@ BUT USING ANY SINGLE CONSUMER SETS WORKER NODE TO 'busy'
 
 import redis, json, sys, time, random
 from kafka import KafkaConsumer, OffsetAndMetadata, TopicPartition
+from threading import Thread
 
 # Unique ID for the worker this consumer is running on
 worker_id = sys.argv[1]
@@ -22,17 +23,34 @@ consumer = KafkaConsumer(topic, value_deserializer = lambda m : json.loads(m.dec
 # Connection to the Redis data-store
 r = redis.Redis(host='localhost', port=6379, decode_responses=True)
 
-# Setting worker status to FREE 
+# Setting worker status to FREE
 r.hset(worker_id, 'status', 'FREE')
 msgCount = 0
+
+# Heartbeat interval
+heartbeat_interval = 5  # secs
+
+# Heartbeat function
+def send_heartbeat():
+    while True:
+        hb = time.time()
+        j = json.dumps({'last_heartbeat' : hb})
+        r.hset('all_heartbeats', worker_id, j)
+        print(f"Heartbeat sent for {worker_id} at time {hb}")
+        time.sleep(heartbeat_interval)
+
+# Start heartbeat thread
+heartbeat_thread = Thread(target=send_heartbeat)
+heartbeat_thread.daemon = True
+heartbeat_thread.start()
 
 def killConsumer(message) :
     global consumer,f
     print(message)
     f.write(message+"\n")
+    f.flush()
     consumer.close()
     exit()
-
 
 def process() :
     global task_id, task_type, task_args, task_tries, worker_id, r, msgCount
@@ -60,6 +78,7 @@ def process() :
         task_status = 'FAILED'
         print(f"Task failed on try {task_tries}")
         f.write((f"Task failed on try {task_tries}\n"))
+        f.flush()
         # Writing to database only after 3 attempts
         if task_tries == 3 :
             r.hset(task_id, 'status', task_status)
@@ -96,6 +115,7 @@ for msg in consumer :
     msgCount += 1
     print(f"Processing -> {msg.topic}, {msg.partition}, {msg.offset}")
     f.write(f"Processing -> {msg.topic}, {msg.partition}, {msg.offset}\n")
+    f.flush()
 
     # Received task -> setting worker to BUSY
     r.hset(worker_id, 'status', 'BUSY')
@@ -124,6 +144,7 @@ for msg in consumer :
     consumer.commit(offsets=d)
     print(f"Last committed -> {msg.partition} {msg.offset}")
     f.write((f"Last committed -> {msg.partition} {msg.offset}\n"))
+    f.flush()
 
     # Sleeping n seconds before picking up next msg
     time.sleep(2)
