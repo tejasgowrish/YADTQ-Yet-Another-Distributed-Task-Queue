@@ -7,6 +7,7 @@
 <body>
     <h1>Submit Task</h1>
     <form id="taskForm" action="/" method="post">
+        <input type="hidden" id="actionType" name="taskID" value="{{task_id}}" required>
         <label for="actionType">Action Type:</label>
         <input type="text" id="actionType" name="actionType" required><br>
         <label for="Comment">Argument 1:</label>
@@ -17,9 +18,10 @@
     </form>
     
     <h2>Check Task Status:</h2>
-    <form action="/status" method="get">
-        <label for="task_id">Enter Task ID:</label>
-        <input type="text" id="task_id" name="task_id" required><br>
+    <form action="/status" method="post">
+        <!-- <label for="task_id">Enter Task ID:</label>
+        <input type="text" id="task_id" name="task_id" required><br> -->
+        <input type="hidden" id="actionType" name="taskID" value="{{task_id}}" required>
         <button type="submit">Check Status</button>
     </form>
 </body>

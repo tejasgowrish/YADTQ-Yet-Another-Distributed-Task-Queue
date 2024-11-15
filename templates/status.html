@@ -6,15 +6,17 @@
 </head>
 <body>
     <h1>Task Status</h1>
-    <p>Task ID: {{ task_id }}</p>
-    {% if result %}
-        <p>Status: {{ status }}</p>
-        <p>Result: {{ result }}</p>
-        <p>Error Logs: {{ error_log }}</p>
-        <p>Attempts Made: {{ tries }}</p>
-    {% else %}
-        <p>Status: {{ status }}</p>
-    {% endif %}
+    {% for i in range(all_task_ids|length) %}
+        <p><strong>Task ID: {{ all_task_ids[i] }}</strong></p>
+        {% if result %}
+            <p>Status: {{ status[i] }}</p>
+            <p>Result: {{ result[i] }}</p>
+            <p>Error Logs: {{ error_log[i] }}</p>
+            <p>Attempts Made: {{ tries[i] }}</p><br><br>
+        {% else %}
+            <p>Status: {{ status[i] }}</p><br><br>
+        {% endif %}
+    {% endfor %}
     <br>
     <button onclick="window.location.href='/'">Submit a new task</button>
 </body>
