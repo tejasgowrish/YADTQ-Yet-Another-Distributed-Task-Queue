@@ -5,7 +5,7 @@
 * Client can submit and monitor tasks
 
 ## Producer 
-* To run from CLI - "tail -f a_tasks.txt | python3 producer.py <topic> <number of partitions in topic>
+* To run from CLI - "tail -f a_tasks.txt | python3 producer.py <topic> <number of partitions in topic>"
 * Tasks with details like Task ID, Task Type, Task Arguments, Task Tries are written to a text file
 * Producer publishes every task to the topic
 * Task distribution to partitions via default round-robin fashion
@@ -13,7 +13,7 @@
 * "end" input from text file signals end of tasks in queue - all processes exit
 
 ## Failure-Prone Consumer
-* To run from CLI - "python3 consumer.py <consumer name> <topic>
+* To run from CLI - "python3 consumer.py <consumer name> <topic>"
 * Each consumer is part of consumer group 'workers', subscribed to topic
 * Executes tasks only in its assigned partition
 * Successfully executed tasks are written to Redis datastore with Task ID, result, number of attempts made
@@ -32,7 +32,7 @@
 
 ## Heartbeat Monitoring
 * To run from CLI - "python3 monitor_hearbeat.py"
-* Recives heartbeats from every active and stand-by consumer every 5 seconds
-* If any consumer has a heartbeat delayed more than allowed (and configurable) hearbeat interval, it is declared DEAD
-* Else, consumer is declared ALIVE
-* Heartbeat logs stored in Redis under 'all_heartbeats' key.
+* Receives heartbeats from every active and stand-by consumer every 5 seconds
+* If any consumer has a heartbeat delayed more than allowed (and configurable) hearbeat interval, it is declared "DEAD"
+* Else, consumer is declared "ALIVE"
+* Heartbeat logs stored in Redis under "all_heartbeats" key.
