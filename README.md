@@ -5,7 +5,7 @@
 * Client can submit and monitor tasks
 
 ## Producer 
-* To run from CLI - "tail -f a_tasks.txt | python3 producer.py <topic> <number of partitions in topic>"
+* To run from CLI - "tail -f a_tasks.txt | python3 producer.py \<topic\> \<number of partitions in topic>\"
 * Tasks with details like Task ID, Task Type, Task Arguments, Task Tries are written to a text file
 * Producer publishes every task to the topic
 * Task distribution to partitions via default round-robin fashion
@@ -13,7 +13,7 @@
 * "end" input from text file signals end of tasks in queue - all processes exit
 
 ## Failure-Prone Consumer
-* To run from CLI - "python3 consumer.py <consumer name> <topic>"
+* To run from CLI - "python3 consumer.py \<consumer name>\ \<topic>\"
 * Each consumer is part of consumer group 'workers', subscribed to topic
 * Executes tasks only in its assigned partition
 * Successfully executed tasks are written to Redis datastore with Task ID, result, number of attempts made
@@ -26,7 +26,7 @@
 * Kafka's load-balancing mechanism reassigns tasks to stand-by or active consumer.
 
 ## Guarantee Stand-by Consumer (Optional)
-* To run from CLI - "python3 guarantee_consumer.py <consumer name> <topic>
+* To run from CLI - "python3 guarantee_consumer.py \<consumer name>\ \<topic>\
 * This consumer will not fail - done only to show that partitions of failed consumers are assigned to this (can be seen in terminal output)
 * Implemented for our understanding
 
